@@ -1,0 +1,8 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"enable": {"type": "boolean", "default": false},
+		"slug": {"type": "string", "default": "SRC_SLUG"}
+	}
+}
