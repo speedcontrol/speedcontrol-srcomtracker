@@ -5,7 +5,7 @@ This bundle is a helper bundle that gets the donation total/goals/bidwars/new do
 ### Confg
 
 ```
-"speedrunComMarathon": {
+{
 	"enable": true,
 	"slug": "SRC_SLUG"
 }

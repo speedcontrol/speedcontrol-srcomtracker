@@ -1,11 +1,11 @@
 // World's best README, available here:
 // Refreshes info from API every 30 seconds.
 // Replicants:
-//   > srcomDonationTotal - current donation total as a float
-//   > srcomDonationGoals - array of open goals (excluding bidwar related goals)
-//   > srcomDonationBidwars - array of open bidwars (with embedded goals)
+//   > donationTotal - current donation total as a float
+//   > donationGoals - array of open goals (excluding bidwar related goals)
+//   > donationBidwars - array of open bidwars (with embedded goals)
 // Messages:
-//   > srcomNewDonation - donation object (with embedded user/goal/bidwar)
+//   > newDonation - donation object (with embedded user/goal/bidwar)
 // STILL TO BE ADDED: Prizes (I have no clue how this works yet because no examples)
 
 'use strict';
@@ -35,9 +35,9 @@ if (nodecg.bundleConfig && nodecg.bundleConfig.enable) {
 	nodecg.log.info('Speedrun.com marathon integration is enabled.');
 	
 	// Setting up replicants.
-	var srcomDonationTotalReplicant = nodecg.Replicant('srcomDonationTotal', {persistent:false, defaultValue:0});
-	var srcomDonationGoalsReplicant = nodecg.Replicant('srcomDonationGoals', {persistent:false, defaultValue:[]});
-	var srcomDonationBidwarsReplicant = nodecg.Replicant('srcomDonationBidwars', {persistent:false, defaultValue:[]});
+	var donationTotal = nodecg.Replicant('donationTotal', {persistent:false, defaultValue:0});
+	var donationGoals = nodecg.Replicant('donationGoals', {persistent:false, defaultValue:[]});
+	var donationBidwars = nodecg.Replicant('donationBidwars', {persistent:false, defaultValue:[]});
 	
 	var url = 'https://www.speedrun.com/api/v1/games/'+nodecg.bundleConfig.slug.toLowerCase();
 	needleGET(url, requestOptions, function(err, response) {
@@ -68,25 +68,25 @@ if (nodecg.bundleConfig && nodecg.bundleConfig.enable) {
 function runFrequentUpdates() {
 	checkDonationTotal(function(total) {
 		// Update the total replicant if the donation total has actually changed.
-		if (srcomDonationTotalReplicant.value !== total)
-			srcomDonationTotalReplicant.value = total;
+		if (donationTotal.value !== total)
+			donationTotal.value = total;
 	});
 	
 	getNewDonations(function(donations) {
 		// If there's any new donations, sends a message for each.
 		if (donations && donations.length > 0) {
 			donations.forEach(function(donation) {
-				nodecg.sendMessage('srcomNewDonation', donation);
+				nodecg.sendMessage('newDonation', donation);
 			});
 		}
 	});
 	
 	// Update goals/bidwars replicants.
 	getGoals(function(updatedGoals) {
-		if (updatedGoals) srcomDonationGoalsReplicant.value = updatedGoals;
+		if (updatedGoals) donationGoals.value = updatedGoals;
 	});
 	getBidwars(function(updatedBidwars) {
-		if (updatedBidwars) srcomDonationBidwarsReplicant.value = updatedBidwars;
+		if (updatedBidwars) donationBidwars.value = updatedBidwars;
 	});
 }
 
