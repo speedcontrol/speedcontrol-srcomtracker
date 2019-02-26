@@ -39,7 +39,7 @@ if (nodecg.bundleConfig && nodecg.bundleConfig.enable) {
 	var donationGoals = nodecg.Replicant('donationGoals', {persistent:false, defaultValue:[]});
 	var donationBidwars = nodecg.Replicant('donationBidwars', {persistent:false, defaultValue:[]});
 	
-	var url = 'https://www.speedrun.com/api/v1/games/'+nodecg.bundleConfig.slug.toLowerCase();
+	var url = 'https://www.speedrun.com/api/v1/games/'+nodecg.bundleConfig.slug;
 	needleGET(url, requestOptions, function(err, response) {
 		// Checks to see if the slug exists on the site.
 		if (!err && response.statusCode === 200) {
